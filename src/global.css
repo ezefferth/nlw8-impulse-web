@@ -2,3 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* deixar como default algumas cores */
+body {
+  @apply bg-[#09090A] text-zinc-100;
+}
