@@ -5,8 +5,8 @@ import ideaUrl from '../../assets/Idea.svg';
 import otherUrl from '../../assets/Other.svg';
 import { useState } from "react";
 import { FeedbackTypeStep } from "./Steps/FeedbackTypeStep";
-import { CloseButton } from '../CloseButton';
 import { FeedbackContentStep } from './Steps/FeedbackContentStep';
+import { FeedbackSuccessStep } from './Steps/FeedbackSuccessStep';
 
 
 //obj que contem todos as imagens do feedback
@@ -41,27 +41,42 @@ export type FeedbackType = keyof typeof feedbackTypes;
 
 export function WidgetForm() {
 
+  const [feedbackType, setFeedbackType] = useState<FeedbackType | null>(null);
+  const [feedbackSent, setFeedbackSent] = useState<boolean>(false);
+
   //qnd user clicar em voltar no FeedbackContentStep
   function handleRestartFeedback() {
+    setFeedbackSent(false);
     setFeedbackType(null);
   }
 
-  const [feedbackType, setFeedbackType] = useState<FeedbackType | null>(null);
+
+
 
   return (
     /*w-[calc()] faz calc da largura que deve ser o widget, e o md-w-auto e qnd for midian ser automatico  */
     < div className="bg-zinc-900 p-4 relative rounded-2xl mb-4 flex flex-col items-center shadow-lg w-[calc(100vw-2rem)] md:w-auto" >
 
-      {!feedbackType ? (
-        //envia como props a funcao set
-        <FeedbackTypeStep onFeedbackTypeChanged={setFeedbackType} />
-      ) : (
-        //e pelas propriedades eh passado o tipo de feedback ele escolheu
-        <FeedbackContentStep
-          feedbackType={feedbackType}
-          onFeedbackRestartRequested={handleRestartFeedback}
-        />
-      )}
+
+      {
+        feedbackSent ? (
+          <FeedbackSuccessStep onFeedbackRestartRequested={handleRestartFeedback}/>
+        ) : (
+          <>
+            {!feedbackType ? (
+              //envia como props a funcao set
+              <FeedbackTypeStep onFeedbackTypeChanged={setFeedbackType} />
+            ) : (
+              //e pelas propriedades eh passado o tipo de feedback ele escolheu
+              <FeedbackContentStep
+                feedbackType={feedbackType}
+                onFeedbackRestartRequested={handleRestartFeedback}
+                onFeedbackSent={() => setFeedbackSent(true)}
+              />
+            )}
+          </>
+        )
+      }
 
       {/* cor neutra 400 */}
       <footer className="text-xs text-neutral-400">{/* underline eh a linha, e o underline offset eh o espacamento da linha abaixo*/}

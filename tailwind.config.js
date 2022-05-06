@@ -1,3 +1,5 @@
+const { borderRadius } = require('tailwindcss/defaultTheme');
+
 module.exports = {
   content: ["./src/**/*.tsx"],
   theme: {
@@ -8,6 +10,10 @@ module.exports = {
           300: '#996DFF',
           500: '#8257e6',
         }
+      },
+      //sobrescrever uma variavel do tailwind
+      borderRadius: {
+        md: '4px'
       }
     },
   },
